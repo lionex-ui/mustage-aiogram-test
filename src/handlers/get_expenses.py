@@ -1,4 +1,5 @@
 import os
+from decimal import Decimal
 from datetime import datetime
 from uuid import uuid4
 
@@ -86,6 +87,13 @@ async def handle_to_date_and_request_get_expenses(message: types.Message, state:
     df.to_excel(file_path, index=False)
 
     file = types.FSInputFile(file_path)
-    await message.answer_document(document=file, reply_markup=get_main_menu_reply_buttons())
+
+    total_expenses_amount_uah = Decimal('0')
+    total_expenses_amount_usd = Decimal('0')
+    for expense in expenses:
+        total_expenses_amount_uah += Decimal(expense.get("uah"))
+        total_expenses_amount_usd += Decimal(expense.get("usd"))
+
+    await message.answer_document(document=file, caption=f"UAH: {total_expenses_amount_uah}\nUSD: {total_expenses_amount_usd}", reply_markup=get_main_menu_reply_buttons())
 
     os.remove(file_path)
