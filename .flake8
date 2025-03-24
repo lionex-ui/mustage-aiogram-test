@@ -1,0 +1,7 @@
+[flake8]
+max-line-length = 120
+max-complexity = 10
+ignore = E203, W503
+select = C, E, F, W
+import-order-style = pep8
+space-after-comma = true
